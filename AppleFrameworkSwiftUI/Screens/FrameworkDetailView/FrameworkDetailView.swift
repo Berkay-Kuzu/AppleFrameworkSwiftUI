@@ -9,36 +9,37 @@ import SwiftUI
 
 struct FrameworkDetailView: View {
     
-    var framework: Framework
-    
-    @Binding var isShowingDetailView: Bool
-    @State var isShowingSafariView: Bool = false
+    @ObservedObject var viewModel: FrameworkDetailViewModel
     
     var body: some View {
         VStack{
-            XDismissButton(isShowingDetailView: $isShowingDetailView)
+            XDismissButton(isShowingDetailView: $viewModel.isShowingDetailView.wrappedValue)
             Spacer()
-            FrameworkTitleView(framework: framework)
-            Text(framework.description)
+            FrameworkTitleView(framework: viewModel.framework)
+            Text(viewModel.framework.description)
                 .fontWeight(.medium)
                 .padding(.all, 30)
             
             Spacer()
-            Button {
-                isShowingSafariView = true
-            } label: {
+            
+            Link(destination: URL(string: viewModel.framework.urlString) ?? URL(string: "www.apple.com")!) {
                 AFButton(buttonTitle: "Learn More")
             }
-            .fullScreenCover(isPresented: $isShowingSafariView) {
-                if let frameworkURLString = URL(string: framework.urlString) {
-                    SafariView(url: frameworkURLString)
-                }
-            }
+            
+//            Button {
+//                viewModel.isShowingSafariView = true
+//            } label: {
+//                AFButton(buttonTitle: "Learn More")
+//            }
+//            .fullScreenCover(isPresented: $viewModel.isShowingSafariView) {
+//                if let frameworkURLString = URL(string: viewModel.framework.urlString) {
+//                    SafariView(url: frameworkURLString)
+//                }
+//            }
         }
     }
 }
 
-//#Preview {
-//    FrameworkDetailView(framework: MockData.sampleFramework)
-//        .preferredColorScheme(.dark)
-//}
+#Preview {
+    FrameworkDetailView(viewModel: FrameworkDetailViewModel(framework: MockData.sampleFramework, isShowingDetailView: .constant(true)))
+}

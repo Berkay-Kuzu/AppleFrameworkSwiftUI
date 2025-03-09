@@ -62,7 +62,8 @@ struct FrameworkGridView: View {
             }
             .navigationTitle("🍎 Frameworks")
             .navigationDestination(for: Framework.self) { framework in
-                FrameworkDetailView(framework: framework, isShowingDetailView: $viewModel.isShowingDetailView)
+                FrameworkDetailView(viewModel: FrameworkDetailViewModel(framework: viewModel.selectedFramework,
+                                                                        isShowingDetailView: $viewModel.isShowingDetailView))
             }
             .tint(.white)
            
